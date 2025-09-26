@@ -109,14 +109,32 @@ def main():
     # Create superuser
     create_superuser()
     
+    # Test Django application
+    print("Testing Django application...")
+    try:
+        from django.test import Client
+        client = Client()
+        response = client.get('/')
+        print(f"✓ Root endpoint test: {response.status_code}")
+        
+        response = client.get('/api/health/')
+        print(f"✓ Health check test: {response.status_code}")
+    except Exception as e:
+        print(f"⚠ Django application test warning: {e}")
+    
     # Start gunicorn
     print("Starting gunicorn server...")
     port = os.environ.get('PORT', '8000')
+    print(f"Binding to 0.0.0.0:{port}")
+    
     os.execvp('gunicorn', [
         'gunicorn',
         '--bind', f'0.0.0.0:{port}',
         '--workers', '3',
         '--timeout', '120',
+        '--access-logfile', '-',
+        '--error-logfile', '-',
+        '--log-level', 'info',
         'pricing_service.wsgi:application'
     ])
 

@@ -1,1 +1,1 @@
-web: python migrate_and_start.py
+web: chmod +x startup.sh && ./startup.sh
