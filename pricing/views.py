@@ -1,8 +1,9 @@
 from rest_framework import viewsets, status, permissions
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from django.db.models import Count, Sum, Q, F
 from django.utils import timezone
+from django.db import connection
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -147,3 +148,27 @@ class PricingDashboardViewSet(viewsets.ViewSet):
         
         serializer = PricingDashboardSerializer(dashboard_data)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([])  # No authentication required for health check
+def health_check(request):
+    """Health check endpoint for Railway deployment"""
+    try:
+        # Test database connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        
+        return Response({
+            'status': 'healthy',
+            'database': 'connected',
+            'timestamp': timezone.now().isoformat()
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({
+            'status': 'unhealthy',
+            'database': 'disconnected',
+            'error': str(e),
+            'timestamp': timezone.now().isoformat()
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     PricingPlanViewSet, CustomerViewSet, SubscriptionViewSet,
     InvoiceViewSet, PricingSettingsViewSet, AuditLogViewSet,
-    PricingDashboardViewSet
+    PricingDashboardViewSet, health_check
 )
 
 router = DefaultRouter()
@@ -17,4 +17,6 @@ router.register(r'dashboard', PricingDashboardViewSet, basename='dashboard')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('health/', health_check, name='health_check'),
+    path('health', health_check, name='health_check_alt'),  # Alternative endpoint
 ]
