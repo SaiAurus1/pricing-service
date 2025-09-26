@@ -68,16 +68,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pricing_service.wsgi.application'
 
 # Database - Railway PostgreSQL
+# Railway provides these environment variables automatically
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'pricing_db'),
+        'NAME': os.getenv('DB_NAME', 'railway'),
         'USER': os.getenv('DB_USER', 'postgres'),
         'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'HOST': os.getenv('DB_HOST', 'postgres.railway.internal'),
         'PORT': os.getenv('DB_PORT', '5432'),
+        'OPTIONS': {
+            'connect_timeout': 10,
+        },
     }
 }
+
+# Debug database connection (remove in production)
+if DEBUG:
+    print(f"Database config: {DATABASES['default']}")
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
