@@ -43,7 +43,7 @@ def apply_migrations():
         print(f"Migration error: {e}")
         print("Attempting to apply migrations individually...")
         
-        # Fallback: apply migrations individually
+        # First apply Django built-in migrations
         try:
             execute_from_command_line(['manage.py', 'migrate', 'auth', '--noinput'])
             print("✓ Auth migrations applied")
@@ -72,6 +72,7 @@ def apply_migrations():
             print(f"Sessions migration error: {e}")
             raise
         
+        # Then apply pricing migrations
         try:
             execute_from_command_line(['manage.py', 'migrate', 'pricing', '--noinput'])
             print("✓ Pricing migrations applied")
