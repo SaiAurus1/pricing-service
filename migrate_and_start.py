@@ -35,44 +35,49 @@ def apply_migrations():
     """Apply migrations in the correct order."""
     print("Applying migrations...")
     
-    # First, apply Django built-in migrations
-    print("Applying Django built-in migrations...")
+    # Apply all migrations at once - Django will handle the order
     try:
-        execute_from_command_line(['manage.py', 'migrate', 'auth', '--noinput'])
-        print("✓ Auth migrations applied")
+        execute_from_command_line(['manage.py', 'migrate', '--noinput'])
+        print("✓ All migrations applied successfully")
     except Exception as e:
-        print(f"Auth migration error: {e}")
-        raise
-    
-    try:
-        execute_from_command_line(['manage.py', 'migrate', 'admin', '--noinput'])
-        print("✓ Admin migrations applied")
-    except Exception as e:
-        print(f"Admin migration error: {e}")
-        raise
-    
-    try:
-        execute_from_command_line(['manage.py', 'migrate', 'contenttypes', '--noinput'])
-        print("✓ Contenttypes migrations applied")
-    except Exception as e:
-        print(f"Contenttypes migration error: {e}")
-        raise
-    
-    try:
-        execute_from_command_line(['manage.py', 'migrate', 'sessions', '--noinput'])
-        print("✓ Sessions migrations applied")
-    except Exception as e:
-        print(f"Sessions migration error: {e}")
-        raise
-    
-    # Then apply custom app migrations
-    print("Applying custom app migrations...")
-    try:
-        execute_from_command_line(['manage.py', 'migrate', 'pricing', '--noinput'])
-        print("✓ Pricing migrations applied")
-    except Exception as e:
-        print(f"Pricing migration error: {e}")
-        raise
+        print(f"Migration error: {e}")
+        print("Attempting to apply migrations individually...")
+        
+        # Fallback: apply migrations individually
+        try:
+            execute_from_command_line(['manage.py', 'migrate', 'auth', '--noinput'])
+            print("✓ Auth migrations applied")
+        except Exception as e:
+            print(f"Auth migration error: {e}")
+            raise
+        
+        try:
+            execute_from_command_line(['manage.py', 'migrate', 'admin', '--noinput'])
+            print("✓ Admin migrations applied")
+        except Exception as e:
+            print(f"Admin migration error: {e}")
+            raise
+        
+        try:
+            execute_from_command_line(['manage.py', 'migrate', 'contenttypes', '--noinput'])
+            print("✓ Contenttypes migrations applied")
+        except Exception as e:
+            print(f"Contenttypes migration error: {e}")
+            raise
+        
+        try:
+            execute_from_command_line(['manage.py', 'migrate', 'sessions', '--noinput'])
+            print("✓ Sessions migrations applied")
+        except Exception as e:
+            print(f"Sessions migration error: {e}")
+            raise
+        
+        try:
+            execute_from_command_line(['manage.py', 'migrate', 'pricing', '--noinput'])
+            print("✓ Pricing migrations applied")
+        except Exception as e:
+            print(f"Pricing migration error: {e}")
+            raise
     
     print("All migrations completed successfully!")
 
