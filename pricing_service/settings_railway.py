@@ -87,6 +87,12 @@ DATABASES = {
 if DEBUG:
     print(f"Database config: {DATABASES['default']}")
 
+# Add migration debugging
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.info(f"Database configuration: {DATABASES['default']}")
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
