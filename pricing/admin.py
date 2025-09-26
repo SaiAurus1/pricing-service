@@ -45,7 +45,7 @@ class PricingSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
-    list_display = ['action_type', 'description', 'timestamp', 'user']
+    list_display = ['action_type', 'description', 'timestamp']
     list_filter = ['action_type', 'timestamp']
-    search_fields = ['description', 'user__username']
+    search_fields = ['description']
     readonly_fields = ['id', 'timestamp']
